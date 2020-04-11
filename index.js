@@ -26,6 +26,12 @@ app.get("*", (req, res)=>{
     };
     res.json(respon);
 });
+app.post("/", (req, res)=>{
+    res.json({
+        status : "unknwn",
+        "PESAN" : "tidak ada proses"
+    });
+});
 //////////
 app.listen(7337, ()=>{
     console.log(" ==== server jalan ====");
