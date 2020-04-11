@@ -26,7 +26,7 @@ app.get("*", (req, res)=>{
     };
     res.json(respon);
 });
-app.post("/", (req, res)=>{
+app.post("*", (req, res)=>{
     res.json({
         status : "unknwn",
         "PESAN" : "tidak ada proses"
