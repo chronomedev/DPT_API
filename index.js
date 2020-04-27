@@ -2,14 +2,19 @@
 // Hansrenee WIllysandro 2020   
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
+
 const logtrigger = require("./log/logserver");
 const pesertaAPI = require("./routing/api/ambilPeserta");
+
+//middleware untuk data json
+app.use(bodyParser.json());
 
 //Middleware untuk log server
 app.use(logtrigger);
 
 app.use(express.urlencoded({extended:false}));
-//Mid untuk subrouting
+//Middleware untuk subrouting
 app.use("/member", pesertaAPI)
 
 

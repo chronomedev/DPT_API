@@ -3,6 +3,7 @@
 const express = require("express");
 const objekRouting = express();
 const peserta = require("./../../model/peserta");
+const kpps = require("../../model/kpps");
 
 
 // fungsi pengecekan data untuk respon
@@ -49,6 +50,20 @@ objekRouting.post("/autentikasi", (req, res)=>{
         });
 
     });
+});
+
+objekRouting.post("/autentikasi/kpps", (req, res)=>{
+    console.log(req.body);
+    kpps.autentikasiByNIk(req.body["nik"], (error, results)=>{
+        if(error){
+            res.send("ADA ERROR BY KPPS");
+            return;
+        }
+        res.send({
+            "status" : "ok",
+            "data_dpt" : cekData(results)
+        });
+    })
 });
 
 module.exports = objekRouting;
