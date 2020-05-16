@@ -6,6 +6,15 @@ const koneksi = require("./database");
 // Parameter instruksi2 itu dinamis bisa apa saja
 //kalau error dibuat 1 parameter aja agar lihat true
 var DPT = { // konstruksi objek pemilih DPT
+    ambilSemuaDPTHitung : (instruksi2)=>{
+        koneksi.query("select count(*) from MASTER_user where is_KPPS = 0 and is_SAKSI = 0 and is_PENGAWAS_TPS =0;", function(err, rows){
+            if(err){
+                instruksi2(true);
+                return;
+            }
+            instruksi2(false, rows);
+        })
+    },
     ambilSemuaDPT : function(instruksi2){ 
         koneksi.query("select * from MASTER_user;", function(err, rows, fields){
             if(err){ 

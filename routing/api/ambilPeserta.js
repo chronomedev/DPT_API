@@ -15,6 +15,16 @@ function cekData(dataMasuk){
     }
 }
 
+objekRouting.get("/total", (req, res)=>{
+    peserta.objekDPT.ambilSemuaDPTHitung((error, hasil)=>{
+        if(error){
+            res.send({status : -1});
+            return;
+        }
+        res.send({status : 1, data : hasil});
+
+    })
+});
 objekRouting.get("/semua", (req, res)=>{ // Ambil semua informasi DPT
     peserta.objekDPT.ambilSemuaDPT((error, results)=>{
         if(error){

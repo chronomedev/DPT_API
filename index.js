@@ -1,11 +1,11 @@
-// Code back end utama
+// Code back end utama simulasi server DPT
 // Hansrenee WIllysandro 2020   
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
 const logtrigger = require("./log/logserver");
-const pesertaAPI = require("./routing/api/ambilPeserta");
+const pesertaAPI = require("./routing/api/ambilPeserta"); //routing peserta
 
 //middleware untuk data json
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(logtrigger);
 
 app.use(express.urlencoded({extended:false}));
-//Middleware untuk subrouting
+//Middleware untuk subr``outing
 app.use("/member", pesertaAPI)
 
 
