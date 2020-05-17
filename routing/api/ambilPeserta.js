@@ -2,9 +2,10 @@
 // Hansrenee Willysandro 2020
 const express = require("express");
 const objekRouting = express();
+// import model
 const peserta = require("./../../model/peserta");
 const kpps = require("../../model/kpps");
-
+const saksi = require("../../model/saksi");
 
 // fungsi pengecekan data untuk respon
 function cekData(dataMasuk){
@@ -62,11 +63,54 @@ objekRouting.post("/autentikasi", (req, res)=>{
     });
 });
 
+// untuk request nama yang ditampilkan dari sertifikat  
+objekRouting.post("/nama/sertifikat_ttd", (req, res)=>{
+    peserta.objekDPT.ambilNamaByNIK(req.body["kpps"], async(error, hasil1)=>{
+        if(error){
+            res.send({status : -1});
+        } else {
+            peserta.objekDPT.ambilNamaByNIK(req.body["saksi"], (error, hasil2)=>{
+                if(error){
+                    res.send({ status :-1});
+                }
+                if(cekData(hasil1+hasil2) != "ksg"){
+                    res.send({status : 1,
+                    data_dpt : [{
+                        kpps : hasil1["nama_lengkap"],
+                        saksi : hasil2["nama_lengkap"]
+                    }]})
+                } else {
+                    res.send({status : 0});
+                }
+            });
+        }
+        
+    })
+});
+objekRouting.post("/autentikasi/pengawas_tps", (req, res)=>{
+
+});
+objekRouting.post("/autentikasi/saksi", (req, res)=>{
+    saksi.autentikasiByNIk(req.body["nik"], (error, hasil)=>{
+        if(error){
+            res.send({
+                status : -1
+            });
+        }
+        res.send({
+            status : 1,
+            data_dpt : cekData(hasil)
+        })
+    })
+});
+
 objekRouting.post("/autentikasi/kpps", (req, res)=>{
     console.log(req.body);
     kpps.autentikasiByNIk(req.body["nik"], (error, results)=>{
         if(error){
-            res.send("ADA ERROR BY KPPS");
+            res.send({
+                status : -1 
+            });
             return;
         }
         res.send({

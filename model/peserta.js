@@ -1,4 +1,4 @@
-// Model objek peserta
+// Model objek peserta secara umum
 // Hansrenee Willysandro 2020
 
 const koneksi = require("./database");
@@ -7,7 +7,7 @@ const koneksi = require("./database");
 //kalau error dibuat 1 parameter aja agar lihat true
 var DPT = { // konstruksi objek pemilih DPT
     ambilSemuaDPTHitung : (instruksi2)=>{
-        koneksi.query("select count(*) from MASTER_user where is_KPPS = 0 and is_SAKSI = 0 and is_PENGAWAS_TPS =0;", function(err, rows){
+        koneksi.query("select count(*) as total from MASTER_user where is_KPPS = 0 and is_SAKSI = 0 and is_PENGAWAS_TPS =0;", function(err, rows){
             if(err){
                 instruksi2(true);
                 return;
@@ -35,6 +35,17 @@ var DPT = { // konstruksi objek pemilih DPT
                return;
            }
            instruksi2(false, rows);
+        });
+    },
+    ambilNamaByNIK: function(nik, instruksi2){
+        console.log("DATA NIK->" + nik);
+        koneksi.query("select nama_lengkap from MASTER_user where NIK =" + koneksi.escape(nik) + ";", function(err, rows, fields){
+           if(err){
+               console.log("ERROR DATABASE->" + err);
+               instruksi2(true);
+               return;
+           }
+           instruksi2(false, rows[0]);
         });
     },
     autentikasiSidikJariDPT: function(nik, instruksi2){
