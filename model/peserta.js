@@ -44,8 +44,12 @@ var DPT = { // konstruksi objek pemilih DPT
                console.log("ERROR DATABASE->" + err);
                instruksi2(true);
                return;
+           } else if(rows[0]["nama_lengkap"] == "" || rows[0]["nama_lengkap"] == null){
+            instruksi2(true);
+           } else {
+            instruksi2(false, rows[0]["nama_lengkap"]);
            }
-           instruksi2(false, rows[0]);
+           
         });
     },
     autentikasiSidikJariDPT: function(nik, instruksi2){

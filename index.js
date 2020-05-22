@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(logtrigger);
 
 app.use(express.urlencoded({extended:false}));
-//Middleware untuk subr``outing
+//Middleware untuk subrouting
 app.use("/member", pesertaAPI)
 
 

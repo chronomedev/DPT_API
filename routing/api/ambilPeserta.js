@@ -6,6 +6,7 @@ const objekRouting = express();
 const peserta = require("./../../model/peserta");
 const kpps = require("../../model/kpps");
 const saksi = require("../../model/saksi");
+const pengawasTPS =  require("../../model/pengawasTPS");
 
 // fungsi pengecekan data untuk respon
 function cekData(dataMasuk){
@@ -63,6 +64,38 @@ objekRouting.post("/autentikasi", (req, res)=>{
     });
 });
 
+objekRouting.post("/nama/catatan_ttd", (req, res)=>{
+    peserta.objekDPT.ambilNamaByNIK(req.body["kpps"], async(error, hasil1)=>{
+        if(error){
+            res.send({status : -1});
+        } else {
+            peserta.objekDPT.ambilNamaByNIK(req.body["saksi"], (error, hasil2)=>{
+                if(error){
+                    res.send({ status :-1});
+                }
+                peserta.objekDPT.ambilNamaByNIK(req.body["pengawas"], (error, hasil3)=>{
+                    if(error){
+                         res.send({ status :-1});
+                    }
+                        if(cekData(hasil1+hasil2+hasil3) != "ksg"){
+                            res.send({status : 1,
+                            data_dpt : [{
+                                kpps : hasil1,
+                                saksi : hasil2,
+                                pengawas : hasil3
+                            }]})
+                        } else {
+                            res.send({status : 0, data_dpt : "ksg"});
+                        }
+                    
+                });
+    
+            });
+        }
+        
+    });
+});
+
 // untuk request nama yang ditampilkan dari sertifikat  
 objekRouting.post("/nama/sertifikat_ttd", (req, res)=>{
     peserta.objekDPT.ambilNamaByNIK(req.body["kpps"], async(error, hasil1)=>{
@@ -76,8 +109,8 @@ objekRouting.post("/nama/sertifikat_ttd", (req, res)=>{
                 if(cekData(hasil1+hasil2) != "ksg"){
                     res.send({status : 1,
                     data_dpt : [{
-                        kpps : hasil1["nama_lengkap"],
-                        saksi : hasil2["nama_lengkap"]
+                        kpps : hasil1,
+                        saksi : hasil2
                     }]})
                 } else {
                     res.send({status : 0});
@@ -88,8 +121,15 @@ objekRouting.post("/nama/sertifikat_ttd", (req, res)=>{
     })
 });
 objekRouting.post("/autentikasi/pengawas_tps", (req, res)=>{
-
+    pengawasTPS.autentikasiByNIk(req.body["nik"], (er, hasil)=>{
+        if(er){
+            res.send({status : -1});
+        }
+        res.send({status : 1, data_dpt : cekData(hasil)});
+        
+    });
 });
+
 objekRouting.post("/autentikasi/saksi", (req, res)=>{
     saksi.autentikasiByNIk(req.body["nik"], (error, hasil)=>{
         if(error){
